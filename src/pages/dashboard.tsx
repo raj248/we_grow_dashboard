@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -14,10 +14,15 @@ import { useProtectAdminRoute } from "@/hooks/useProtectAdminRoute";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(false);
-  setLoading(true);
-  setTimeout(() => {
-    setLoading(false);
-  }, 2000);
+
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000); // Simulate 1 second loading
+    return () => clearTimeout(timer);
+  }, []);
+
   useProtectAdminRoute();
   const dummyData = [
     { name: "Mon", views: 120, completed: 30, new: 12 },
