@@ -4,6 +4,7 @@ import Dashboard from "@/pages/dashboard";
 import UsersPage from "./pages/users";
 import OrderPage from "./pages/orders";
 import TopupPage from "./pages/topup";
+import TransactionPage from "./pages/transaction";
 import Debug from "@/pages/debug";
 import Settings from "@/pages/settings";
 import Login from "@/pages/login";
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/Users" element={<UsersPage />} />
                 <Route path="/Orders" element={<OrderPage />} />
                 <Route path="/Topup" element={<TopupPage />} />
+                <Route path="/Transactions" element={<TransactionPage />} />
                 <Route path="/Debug" element={<Debug />} />
                 <Route path="/Settings" element={<Settings />} />
               </Route>

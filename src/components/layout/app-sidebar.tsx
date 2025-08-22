@@ -46,7 +46,11 @@ const data = {
       url: "Topup",
       icon: PieChart,
     },
-
+    {
+      name: "Transactions",
+      url: "Transactions",
+      icon: PieChart,
+    },
     {
       name: "Debug",
       url: "Debug",
