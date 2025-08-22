@@ -5,6 +5,7 @@ import UsersPage from "./pages/users";
 import OrderPage from "./pages/orders";
 import TopupPage from "./pages/topup";
 import TransactionPage from "./pages/transaction";
+import BoostPlanPage from "./pages/boostplan";
 import Debug from "@/pages/debug";
 import Settings from "@/pages/settings";
 import Login from "@/pages/login";
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/Orders" element={<OrderPage />} />
                 <Route path="/Topup" element={<TopupPage />} />
                 <Route path="/Transactions" element={<TransactionPage />} />
+                <Route path="/BoostPlans" element={<BoostPlanPage />} />
                 <Route path="/Debug" element={<Debug />} />
                 <Route path="/Settings" element={<Settings />} />
               </Route>

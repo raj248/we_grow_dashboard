@@ -52,6 +52,12 @@ const data = {
       icon: PieChart,
     },
     {
+      name: "Boost Plans",
+      url: "BoostPlans",
+      icon: PieChart,
+    },
+
+    {
       name: "Debug",
       url: "Debug",
       icon: PieChart,
