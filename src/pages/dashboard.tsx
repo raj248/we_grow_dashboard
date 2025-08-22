@@ -14,7 +14,10 @@ import { useProtectAdminRoute } from "@/hooks/useProtectAdminRoute";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(false);
-
+  setLoading(true);
+  setTimeout(() => {
+    setLoading(false);
+  }, 2000);
   useProtectAdminRoute();
   const dummyData = [
     { name: "Mon", views: 120, completed: 30, new: 12 },

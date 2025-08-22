@@ -6,7 +6,7 @@ import UsersPage from "./pages/users";
 import OrderPage from "./pages/orders";
 import Debug from "@/pages/debug";
 import Settings from "@/pages/settings";
-import Trash from "@/pages/trash";
+// import Trash from "@/pages/trash";
 import Login from "@/pages/login";
 import { ThemeProvider } from "./components/theme/theme-provider";
 import { ConfirmDialogProvider } from "./components/modals/global-confirm-dialog";
@@ -27,7 +27,7 @@ function App() {
                 <Route path="/Orders" element={<OrderPage />} />
                 <Route path="/Debug" element={<Debug />} />
                 <Route path="/Settings" element={<Settings />} />
-                <Route path="/Trash" element={<Trash />} />
+                {/* <Route path="/Trash" element={<Trash />} /> */}
               </Route>
             </Routes>
           </BrowserRouter>

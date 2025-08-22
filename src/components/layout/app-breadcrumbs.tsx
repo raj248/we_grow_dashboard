@@ -18,7 +18,7 @@ export function AppBreadcrumbs() {
 
   useEffect(() => {
     const fetchDynamicNames = async () => {
-      const segments = location.pathname.split("/").filter(Boolean);
+      // const segments = location.pathname.split("/").filter(Boolean);
       const updates: Record<string, string> = {};
 
       // await Promise.all(
