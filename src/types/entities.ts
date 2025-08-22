@@ -70,3 +70,12 @@ export interface WatchHistory {
   orderId: string;
   watchedAt: string;
 }
+
+export interface TopupOptions {
+  id: string;
+  coins: number;
+  googleProductId: string;
+  isActive: boolean;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+}

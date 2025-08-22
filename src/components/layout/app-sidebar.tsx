@@ -9,7 +9,6 @@ import {
   PieChart,
   Settings2,
   // SquareTerminal,
-  Trash2,
 } from "lucide-react";
 
 // import { NavMain } from "@/components/nav-main"
@@ -43,6 +42,12 @@ const data = {
       icon: PieChart,
     },
     {
+      name: "Topup",
+      url: "Topup",
+      icon: PieChart,
+    },
+
+    {
       name: "Debug",
       url: "Debug",
       icon: PieChart,
@@ -51,11 +56,6 @@ const data = {
       name: "Settings",
       url: "Settings",
       icon: Settings2,
-    },
-    {
-      name: "Trash",
-      url: "Trash",
-      icon: Trash2,
     },
   ],
 };

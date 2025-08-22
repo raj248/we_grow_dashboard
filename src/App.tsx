@@ -1,12 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "@/components/layout/layout";
 import Dashboard from "@/pages/dashboard";
-// const Dashboard = React.lazy(() => import("@/pages/dashboard"));
 import UsersPage from "./pages/users";
 import OrderPage from "./pages/orders";
+import TopupPage from "./pages/topup";
 import Debug from "@/pages/debug";
 import Settings from "@/pages/settings";
-// import Trash from "@/pages/trash";
 import Login from "@/pages/login";
 import { ThemeProvider } from "./components/theme/theme-provider";
 import { ConfirmDialogProvider } from "./components/modals/global-confirm-dialog";
@@ -25,9 +24,9 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/Users" element={<UsersPage />} />
                 <Route path="/Orders" element={<OrderPage />} />
+                <Route path="/Topup" element={<TopupPage />} />
                 <Route path="/Debug" element={<Debug />} />
                 <Route path="/Settings" element={<Settings />} />
-                {/* <Route path="/Trash" element={<Trash />} /> */}
               </Route>
             </Routes>
           </BrowserRouter>
