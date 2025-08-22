@@ -15,7 +15,7 @@ export const columns: ColumnDef<Transaction>[] = [
     header: "Amount",
     cell: ({ row }) => {
       const amount = row.getValue("amount");
-      return `$${amount}`;
+      return `${amount}`;
     },
   },
   {
