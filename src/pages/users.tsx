@@ -1,7 +1,7 @@
 // src/pages/Users.tsx
 import { useUsers } from "@/hooks/useUsers";
 import { Button } from "@/components/ui/button";
-import { UserTable } from "@/components/table/user-table";
+import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/user";
 
 export default function UsersPage() {
@@ -19,7 +19,7 @@ export default function UsersPage() {
         Reload
       </Button>
 
-      <UserTable
+      <DataTable
         columns={columns}
         data={users.data}
         onRowClick={(user) => {

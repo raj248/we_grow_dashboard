@@ -42,6 +42,26 @@ export interface Order {
   status: "PENDING" | "ACTIVE" | "COMPLETED" | "CANCELLED";
   createdAt: string;
   updatedAt: string;
+
+  boostPlan?: BoostPlan;
+  user?: User;
+  watchHistory?: WatchHistory[];
+}
+
+export interface BoostPlan {
+  id: string;
+  title: string;
+  description?: string;
+  price: number;
+  views: number;
+  duration: number;
+  reward: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+
+  // 🔹 Relation
+  orders?: Order[];
 }
 
 export interface WatchHistory {

@@ -6,7 +6,6 @@ import {
   // Command,
   Frame,
   // GalleryVerticalEnd,
-  Map,
   PieChart,
   Settings2,
   // SquareTerminal,
@@ -36,6 +35,11 @@ const data = {
     {
       name: "Users",
       url: "Users",
+      icon: PieChart,
+    },
+    {
+      name: "Orders",
+      url: "Orders",
       icon: PieChart,
     },
     {

@@ -27,7 +27,7 @@ interface DataTableProps<TData, TValue> {
   onRowClick?: (row: TData) => void;
 }
 
-export function UserTable<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
   onRowClick,
@@ -82,8 +82,8 @@ export function UserTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className={onRowClick ? "cursor-pointer" : ""} // 👈 add cursor
-                onClick={() => onRowClick?.(row.original)} // 👈 trigger callback
+                className={onRowClick ? "cursor-pointer" : ""}
+                onClick={() => onRowClick?.(row.original)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
