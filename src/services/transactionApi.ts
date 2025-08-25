@@ -19,7 +19,17 @@ export const getTransactionById = async (
   id: string
 ): Promise<APIResponse<Transaction>> => {
   const res = await axios.get<APIResponse<Transaction>>(
-    `${API_URL}/transaction/${id}`
+    `${API_URL}/transactions/${id}`
+  );
+  return res.data;
+};
+
+// GET transaction by userId
+export const getTransactionsByUserId = async (
+  userId: string
+): Promise<APIResponse<Transaction[]>> => {
+  const res = await axios.get<APIResponse<Transaction[]>>(
+    `${API_URL}/transactions/user/${userId}`
   );
   return res.data;
 };
