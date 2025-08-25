@@ -27,7 +27,7 @@ export function CreateBoostPlanDialog({
       </DialogTrigger>
 
       {/* Content */}
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create Boost Plan</DialogTitle>
           <DialogDescription>
@@ -35,7 +35,10 @@ export function CreateBoostPlanDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <CreateBoostPlanForm />
+        {/* Ensure form fills available width */}
+        <div className="w-full">
+          <CreateBoostPlanForm />
+        </div>
       </DialogContent>
     </Dialog>
   );
