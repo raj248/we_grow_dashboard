@@ -25,6 +25,7 @@ export default function BoostPlanPage() {
         onRowClick={(boostPlan) => {
           console.log("boost plan : ", boostPlan.id);
         }}
+        inputLabel="Find by Title, Description, Price, Views, Duration and Reward"
       />
     </div>
   );

@@ -25,12 +25,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
+  inputLabel?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   onRowClick,
+  inputLabel,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState<ColumnFiltersState>([]);
 
@@ -49,12 +51,12 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border mt-2">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter By User ID or Balance..."
+          placeholder={inputLabel ?? "Filter By User ID or Balance..."}
           onChange={(event) => table.setGlobalFilter(event.target.value)}
-          className="max-w-sm"
+          className="w-[60%]"
         />
       </div>
       <Table>
