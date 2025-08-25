@@ -26,6 +26,15 @@ export const columns: ColumnDef<BoostPlan>[] = [
     },
   },
   {
+    accessorKey: "salePrice",
+    header: "Sale Price",
+    cell: ({ row }) => {
+      const salePrice = row.getValue("salePrice");
+      if (!salePrice) return "N/A";
+      return `${salePrice}`;
+    },
+  },
+  {
     accessorKey: "views",
     header: "Views",
   },

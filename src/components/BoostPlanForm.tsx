@@ -20,15 +20,32 @@ import { useCreateBoostPlan, useUpdateBoostPlan } from "@/hooks/useBoostPlan";
 import type { BoostPlan } from "@/types/entities";
 
 // 🔹 Validation schema
-export const boostPlanSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
-  price: z.coerce.number().min(0, "Price must be positive"),
-  views: z.coerce.number().min(1, "Views must be at least 1"),
-  duration: z.coerce.number().min(1, "Duration must be at least 1"),
-  reward: z.coerce.number().min(0, "Reward must be positive"),
-  isActive: z.boolean().default(true),
-});
+
+export const boostPlanSchema = z
+  .object({
+    title: z.string().min(1, "Title is required"),
+    description: z.string().optional(),
+    price: z.coerce.number().min(0, "Price must be positive"),
+    salePrice: z.coerce
+      .number()
+      .min(0, "Sale price must be positive")
+      .optional(),
+    views: z.coerce.number().min(1, "Views must be at least 1"),
+    duration: z.coerce.number().min(1, "Duration must be at least 1"),
+    reward: z.coerce.number().min(0, "Reward must be positive"),
+    isActive: z.boolean().default(true),
+  })
+  .refine(
+    (data) => data.salePrice === undefined || data.salePrice <= data.price,
+    {
+      path: ["salePrice"],
+      message: "Sale price cannot be greater than price",
+    }
+  )
+  .refine((data) => data.salePrice === undefined || data.salePrice > 0, {
+    path: ["salePrice"],
+    message: "Sale price must be greater than 0",
+  });
 
 type BoostPlanFormValues = z.infer<typeof boostPlanSchema>;
 
@@ -47,6 +64,7 @@ export function BoostPlanForm({ mode, plan, onSuccess }: Props) {
             title: plan.title,
             description: plan.description ?? "",
             price: plan.price,
+            salePrice: plan.salePrice,
             views: plan.views,
             duration: plan.duration,
             reward: plan.reward,
@@ -56,6 +74,7 @@ export function BoostPlanForm({ mode, plan, onSuccess }: Props) {
             title: "",
             description: "",
             price: 1,
+            salePrice: 1,
             views: 1,
             duration: 1,
             reward: 1,
@@ -144,6 +163,45 @@ export function BoostPlanForm({ mode, plan, onSuccess }: Props) {
                 <FormMessage />
               </FormItem>
             )}
+          />
+
+          {/* Sale Price */}
+          <FormField
+            control={form.control}
+            name="salePrice"
+            render={({ field }) => {
+              const price = form.watch("price");
+              const salePrice = form.watch("salePrice");
+
+              let discountMessage: string | null = null;
+              if (salePrice && salePrice > 0) {
+                if (salePrice < price) {
+                  const discount = Math.round(
+                    ((price - salePrice) / price) * 100
+                  );
+                  discountMessage = `Discount: ${discount}% off`;
+                } else if (salePrice === price) {
+                  discountMessage = "No discount (same as price)";
+                } else {
+                  discountMessage = "Sale price cannot be greater than price";
+                }
+              }
+
+              return (
+                <FormItem>
+                  <FormLabel>Sale Price (Optional)</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                  {discountMessage && (
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {discountMessage}
+                    </p>
+                  )}
+                </FormItem>
+              );
+            }}
           />
 
           {/* Views */}

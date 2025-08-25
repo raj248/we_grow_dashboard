@@ -53,6 +53,7 @@ export interface BoostPlan {
   title: string;
   description?: string;
   price: number;
+  salePrice?: number;
   views: number;
   duration: number;
   reward: number;

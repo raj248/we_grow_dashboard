@@ -2,7 +2,7 @@ import { useBoostPlans, useDeleteBoostPlan } from "@/hooks/useBoostPlan";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/boostplan";
-import { BoostPlanDialog } from "@/components/create-boost-plan-dialog";
+import { BoostPlanDialog } from "@/components/BoostPlanDialog";
 import type { BoostPlan } from "@/types/entities";
 
 export default function BoostPlanPage() {
