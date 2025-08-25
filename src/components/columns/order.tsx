@@ -44,6 +44,18 @@ export const columns: ColumnDef<Order>[] = [
     header: "Status",
   },
   {
+    accessorKey: "viewCount",
+    header: "View Count",
+  },
+  {
+    accessorKey: "completedViewCount",
+    header: "Completed View Count",
+    cell: ({ row }) => {
+      const completedCount = row.getValue("completedViewCount");
+      return `${completedCount ? completedCount : "Not Completed"}`;
+    },
+  },
+  {
     accessorKey: "createdAt",
     header: "Created At",
     cell: ({ row }) => {
