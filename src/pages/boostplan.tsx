@@ -2,6 +2,7 @@ import { useBoostPlans } from "@/hooks/useBoostPlan";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/boostplan";
+import { CreateBoostPlanDialog } from "@/components/create-boost-plan-dialog";
 
 export default function BoostPlanPage() {
   const { data: boostPlans, isLoading } = useBoostPlans();
@@ -18,7 +19,7 @@ export default function BoostPlanPage() {
       <Button className="mt-4" onClick={() => {}}>
         Reload
       </Button>
-
+      <CreateBoostPlanDialog />
       <DataTable
         columns={columns}
         data={boostPlans.data}
