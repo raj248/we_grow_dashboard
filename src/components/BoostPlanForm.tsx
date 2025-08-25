@@ -16,10 +16,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { useCreateBoostPlan } from "@/hooks/useBoostPlan";
+import { useCreateBoostPlan, useUpdateBoostPlan } from "@/hooks/useBoostPlan";
+import type { BoostPlan } from "@/types/entities";
 
 // 🔹 Validation schema
-
 export const boostPlanSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
@@ -32,36 +32,72 @@ export const boostPlanSchema = z.object({
 
 type BoostPlanFormValues = z.infer<typeof boostPlanSchema>;
 
-export function CreateBoostPlanForm() {
+type Props = {
+  mode: "create" | "edit";
+  plan?: BoostPlan;
+  onSuccess?: () => void;
+};
+
+export function BoostPlanForm({ mode, plan, onSuccess }: Props) {
   const form = useForm<BoostPlanFormValues>({
-    resolver: zodResolver(boostPlanSchema) as any, // Fix type mismatch
-    defaultValues: {
-      title: "",
-      description: "",
-      price: 0,
-      views: 1,
-      duration: 1,
-      reward: 0,
-      isActive: true,
-    },
+    resolver: zodResolver(boostPlanSchema) as any,
+    defaultValues:
+      mode === "edit" && plan
+        ? {
+            title: plan.title,
+            description: plan.description ?? "",
+            price: plan.price,
+            views: plan.views,
+            duration: plan.duration,
+            reward: plan.reward,
+            isActive: plan.isActive,
+          }
+        : {
+            title: "",
+            description: "",
+            price: 1,
+            views: 1,
+            duration: 1,
+            reward: 1,
+            isActive: true,
+          },
   });
 
-  const { mutate, isPending } = useCreateBoostPlan();
+  const createMutation = useCreateBoostPlan();
+  const updateMutation = useUpdateBoostPlan();
 
   function onSubmit(values: BoostPlanFormValues) {
-    mutate(values, {
-      onSuccess: () => {
-        form.reset();
-      },
-      onError: (err) => {
-        console.error("Failed to create plan:", err.message);
-      },
-    });
+    if (mode === "edit" && plan) {
+      updateMutation.mutate(
+        { id: plan.id, boostPlan: values },
+        {
+          onSuccess: () => {
+            onSuccess?.();
+            console.log("Plan updated successfully");
+          },
+          onError: (err) =>
+            console.error("Failed to update plan:", err.message),
+        }
+      );
+    } else {
+      createMutation.mutate(values, {
+        onSuccess: () => {
+          form.reset();
+          onSuccess?.();
+          console.log("Plan created successfully");
+        },
+        onError: (err) => console.error("Failed to create plan:", err.message),
+      });
+    }
   }
+
+  const isPending = createMutation.isPending || updateMutation.isPending;
 
   return (
     <div className="max-w-xl mx-auto p-6 border rounded-lg shadow-sm">
-      <h2 className="text-xl font-bold mb-4">Create Boost Plan</h2>
+      <h2 className="text-xl font-bold mb-4">
+        {mode === "edit" ? "Edit Boost Plan" : "Create Boost Plan"}
+      </h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -179,7 +215,13 @@ export function CreateBoostPlanForm() {
 
           {/* Submit */}
           <Button type="submit" disabled={isPending} className="w-full">
-            {isPending ? "Creating..." : "Create Plan"}
+            {isPending
+              ? mode === "edit"
+                ? "Updating..."
+                : "Creating..."
+              : mode === "edit"
+              ? "Update Plan"
+              : "Create Plan"}
           </Button>
         </form>
       </Form>

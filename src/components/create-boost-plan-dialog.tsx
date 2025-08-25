@@ -1,4 +1,4 @@
-// src/components/boost/CreateBoostPlanDialog.tsx
+// src/components/boost/BoostPlanDialog.tsx
 "use client";
 
 import {
@@ -8,37 +8,73 @@ import {
   DialogTitle,
   DialogDescription,
   DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CreateBoostPlanForm } from "./CreateBoostPlanForm";
+import { BoostPlanForm } from "./BoostPlanForm";
+import type { BoostPlan } from "@/types/entities";
+import { useState } from "react";
 
-type CreateBoostPlanDialogProps = {
+type BoostPlanDialogProps = {
+  mode: "create" | "edit"; // Create or Edit
   triggerLabel?: string;
+  plan?: BoostPlan; // Required if mode = edit
+  onDelete?: (planId: string) => void;
 };
 
-export function CreateBoostPlanDialog({
-  triggerLabel = "New Boost Plan",
-}: CreateBoostPlanDialogProps) {
+export function BoostPlanDialog({
+  mode,
+  triggerLabel = mode === "create" ? "New Boost Plan" : "Edit Plan",
+  plan,
+  onDelete,
+}: BoostPlanDialogProps) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
-      {/* Trigger button */}
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>{triggerLabel}</Button>
       </DialogTrigger>
 
-      {/* Content */}
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create Boost Plan</DialogTitle>
+          <DialogTitle>
+            {mode === "create" ? "Create Boost Plan" : "Edit Boost Plan"}
+          </DialogTitle>
           <DialogDescription>
-            Fill in the details below to create a new Boost Plan.
+            {mode === "create"
+              ? "Fill in the details below to create a new Boost Plan."
+              : "Update the details of this Boost Plan."}
           </DialogDescription>
         </DialogHeader>
 
-        {/* Ensure form fills available width */}
+        {/* Form */}
         <div className="w-full">
-          <CreateBoostPlanForm />
+          <BoostPlanForm
+            plan={plan}
+            onSuccess={() => setOpen(false)}
+            mode={mode}
+          />
         </div>
+
+        {/* Footer actions */}
+        <DialogFooter className="flex justify-between">
+          {mode === "edit" && onDelete && plan && (
+            <Button
+              variant="destructive"
+              onClick={() => {
+                onDelete(plan.id);
+                setOpen(false);
+              }}
+            >
+              Delete
+            </Button>
+          )}
+
+          <Button variant="secondary" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

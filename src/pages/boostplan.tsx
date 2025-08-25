@@ -1,13 +1,14 @@
-import { useBoostPlans } from "@/hooks/useBoostPlan";
+import { useBoostPlans, useDeleteBoostPlan } from "@/hooks/useBoostPlan";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/boostplan";
-import { CreateBoostPlanDialog } from "@/components/create-boost-plan-dialog";
+import { BoostPlanDialog } from "@/components/create-boost-plan-dialog";
+import type { BoostPlan } from "@/types/entities";
 
 export default function BoostPlanPage() {
   const { data: boostPlans, isLoading } = useBoostPlans();
-  console.log("In the BoostPlan Page");
-  console.log(boostPlans);
+  const deleteMutation = useDeleteBoostPlan();
+
   if (isLoading) return <p>Loading...</p>;
 
   if (!boostPlans?.success)
@@ -19,9 +20,36 @@ export default function BoostPlanPage() {
       <Button className="mt-4" onClick={() => {}}>
         Reload
       </Button>
-      <CreateBoostPlanDialog />
+      <BoostPlanDialog mode={"create"} />
       <DataTable
-        columns={columns}
+        columns={[
+          ...columns,
+          {
+            id: "actions",
+            header: "Actions",
+            cell: ({ row }) => {
+              const plan = row.original as BoostPlan;
+              return (
+                <BoostPlanDialog
+                  mode="edit"
+                  plan={plan}
+                  triggerLabel="Edit"
+                  onDelete={(planId: string) => {
+                    console.log("Delete", planId);
+                    deleteMutation.mutate(planId, {
+                      onSuccess: () => {
+                        console.log("Plan deleted successfully");
+                      },
+                      onError: (err) => {
+                        console.error("Failed to delete plan:", err.message);
+                      },
+                    });
+                  }}
+                />
+              );
+            },
+          },
+        ]}
         data={boostPlans.data}
         onRowClick={(boostPlan) => {
           console.log("boost plan : ", boostPlan.id);
