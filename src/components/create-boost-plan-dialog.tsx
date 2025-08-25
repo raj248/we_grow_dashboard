@@ -1,4 +1,3 @@
-// src/components/boost/BoostPlanDialog.tsx
 "use client";
 
 import {
@@ -10,15 +9,26 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { BoostPlanForm } from "./BoostPlanForm";
 import type { BoostPlan } from "@/types/entities";
 import { useState } from "react";
 
 type BoostPlanDialogProps = {
-  mode: "create" | "edit"; // Create or Edit
+  mode: "create" | "edit";
   triggerLabel?: string;
-  plan?: BoostPlan; // Required if mode = edit
+  plan?: BoostPlan;
   onDelete?: (planId: string) => void;
 };
 
@@ -60,15 +70,35 @@ export function BoostPlanDialog({
         {/* Footer actions */}
         <DialogFooter className="flex justify-between">
           {mode === "edit" && onDelete && plan && (
-            <Button
-              variant="destructive"
-              onClick={() => {
-                onDelete(plan.id);
-                setOpen(false);
-              }}
-            >
-              Delete
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">Delete</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to delete this Boost Plan?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. The plan{" "}
+                    <span className="font-semibold">{plan.title}</span> will be
+                    permanently deleted.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      onDelete(plan.id);
+                      setOpen(false); // close parent dialog after delete
+                    }}
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
 
           <Button variant="secondary" onClick={() => setOpen(false)}>
