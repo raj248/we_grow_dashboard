@@ -1,10 +1,13 @@
+import { format } from "date-fns";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { useOrdersByUserId } from "@/hooks/useOrders";
 import { useTransactionsByUserId } from "@/hooks/useTransactions";
+import type { Order, Transaction } from "@/types/entities";
 
 type UserDetailsSheetProps = {
   user: any | null;
@@ -12,7 +15,9 @@ type UserDetailsSheetProps = {
 };
 
 export function UserDetailsSheet({ user, onClose }: UserDetailsSheetProps) {
-  const { data: transactions, isLoading } = useTransactionsByUserId(
+  const { data: transactions, isLoading: isTransactionLoading } =
+    useTransactionsByUserId(user ? user.userId : "");
+  const { data: orders, isLoading: isOrderLoading } = useOrdersByUserId(
     user ? user.userId : ""
   );
   return (
@@ -35,13 +40,14 @@ export function UserDetailsSheet({ user, onClose }: UserDetailsSheetProps) {
             <div className="mt-6">
               <h3 className="font-medium">Transactions</h3>
               {/* Transactions component goes here */}
-              {isLoading ? (
+              {isTransactionLoading ? (
                 <p>Loading transactions...</p>
               ) : transactions?.success ? (
                 <ul>
-                  {transactions.data.map((transaction: any) => (
-                    <li key={transaction.transactionId}>
-                      {transaction.amount} - {transaction.status}
+                  {transactions.data.map((transaction: Transaction) => (
+                    <li key={transaction.id}>
+                      {transaction.transactionId} - {transaction.amount} -{" "}
+                      {transaction.status}
                     </li>
                   ))}
                 </ul>
@@ -52,6 +58,20 @@ export function UserDetailsSheet({ user, onClose }: UserDetailsSheetProps) {
             <div>
               <h3 className="font-medium">Orders</h3>
               {/* Orders component goes here */}
+              {isOrderLoading ? (
+                <p>Loading Orders...</p>
+              ) : orders?.success ? (
+                <ul>
+                  {orders.data.map((order: Order) => (
+                    <li key={order.id}>
+                      {format(new Date(order.createdAt), "dd/MM/yyyy")} -{" "}
+                      {order.status}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No orders found or an error occurred.</p>
+              )}
             </div>
             <div>
               <h3 className="font-medium">Watch History</h3>
