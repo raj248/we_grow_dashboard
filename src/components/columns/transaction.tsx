@@ -5,6 +5,13 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "transactionId",
     header: "Transaction ID",
+    // limit the width of this column
+    cell: ({ row }) => {
+      const transactionId = row.getValue("transactionId");
+      return (transactionId as string).length > 80
+        ? (transactionId as string).substring(0, 80) + "..."
+        : transactionId;
+    },
   },
   {
     accessorKey: "userId",

@@ -76,7 +76,7 @@ export interface WatchHistory {
 export interface TopupOptions {
   id: string;
   coins: number;
-  googleProductId: string;
+  originalPrice: number;
   isActive: boolean;
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string

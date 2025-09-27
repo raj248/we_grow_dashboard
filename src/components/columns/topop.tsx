@@ -3,21 +3,21 @@ import type { TopupOptions } from "@/types/entities";
 import type { ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<TopupOptions>[] = [
-  //   {
-  //     accessorKey: "price",
-  //     header: "Price",
-  //     cell: ({ row }) => {
-  //       const price = row.getValue("price");
-  //       return `$${price}`;
-  //     },
-  //   },
+  {
+    accessorKey: "originalPrice",
+    header: "Price",
+    cell: ({ row }) => {
+      const price = row.getValue("originalPrice");
+      return `₹${price}`;
+    },
+  },
+  {
+    accessorKey: "id",
+    header: "Google Product ID",
+  },
   {
     accessorKey: "coins",
     header: "Coins",
-  },
-  {
-    accessorKey: "googleProductId",
-    header: "Google Product ID",
   },
   {
     accessorKey: "isActive",

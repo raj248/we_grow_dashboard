@@ -21,7 +21,7 @@ export const columns: ColumnDef<User>[] = [
     header: "Wallet Balance",
     cell: ({ row }) => {
       const balance = row.original.wallet?.balance;
-      return balance != null ? `$${balance.toFixed(2)}` : "N/A";
+      return balance != null ? `${balance}` : "N/A";
     },
   },
   {
