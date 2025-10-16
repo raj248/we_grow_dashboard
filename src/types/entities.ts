@@ -52,16 +52,19 @@ export interface Order {
 export interface BoostPlan {
   id: string;
   title: string;
-  description?: string;
   price: number;
-  salePrice?: number;
-  views: number;
   duration: number;
   reward: number;
+
+  views: number;
+  likes: number;
+  subscribers: number;
+
+  description?: string;
   isActive: boolean;
+
   createdAt: string;
   updatedAt: string;
-
   // 🔹 Relation
   orders?: Order[];
 }

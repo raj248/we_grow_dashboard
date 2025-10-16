@@ -17,7 +17,7 @@ export default function BoostPlanPage() {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Boost Plans</h1>
-      <Button className="mt-4" onClick={() => {}}>
+      <Button className="mt-4 mr-3" onClick={() => {}}>
         Reload
       </Button>
       <BoostPlanDialog mode={"create"} />
