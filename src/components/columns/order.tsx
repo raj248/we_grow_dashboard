@@ -29,7 +29,10 @@ export const columns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       const order = row.original as Order;
       const completed = order.completedCount;
-      const total = order.boostPlan?.views ?? 0;
+      const total =
+        order.boostPlan?.views ||
+        order.boostPlan?.likes ||
+        order.boostPlan?.subscribers;
 
       return (
         <span>
@@ -45,14 +48,38 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "viewCount",
-    header: "View Count",
+    header: "Views",
+  },
+  {
+    accessorKey: "likeCount",
+    header: "Likes",
+  },
+  {
+    accessorKey: "subscriberCount",
+    header: "Subscribers",
   },
   {
     accessorKey: "completedViewCount",
-    header: "Completed View Count",
+    header: "View at Completion",
     cell: ({ row }) => {
       const completedCount = row.getValue("completedViewCount");
-      return `${completedCount ? completedCount : "Not Completed"}`;
+      return `${completedCount ? completedCount : "--"}`;
+    },
+  },
+  {
+    accessorKey: "completedLikeCount",
+    header: "Like at Completion",
+    cell: ({ row }) => {
+      const completedCount = row.getValue("completedLikeCount");
+      return `${completedCount ? completedCount : "--"}`;
+    },
+  },
+  {
+    accessorKey: "completedSubscriberCount",
+    header: "Subscriber at Completion",
+    cell: ({ row }) => {
+      const completedCount = row.getValue("completedSubscriberCount");
+      return `${completedCount ? completedCount : "--"}`;
     },
   },
   {
