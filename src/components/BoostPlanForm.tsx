@@ -208,7 +208,7 @@ export function BoostPlanForm({ mode, plan, onSuccess }: Props) {
             name="duration"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Duration (days)</FormLabel>
+                <FormLabel>Duration (sec)</FormLabel>
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
