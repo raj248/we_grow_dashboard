@@ -1,5 +1,4 @@
 import { useBoostPlans, useDeleteBoostPlan } from "@/hooks/useBoostPlan";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/boostplan";
 import { BoostPlanDialog } from "@/components/BoostPlanDialog";
@@ -17,9 +16,7 @@ export default function BoostPlanPage() {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Boost Plans</h1>
-      <Button className="mt-4 mr-3" onClick={() => {}}>
-        Reload
-      </Button>
+
       <BoostPlanDialog mode={"create"} />
       <DataTable
         columns={[
