@@ -5,7 +5,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useOrdersByUserId } from "@/hooks/useOrders";
+import { useDeleteOrder, useOrdersByUserId } from "@/hooks/useOrders";
 import { useTransactionsByUserId } from "@/hooks/useTransactions";
 import type { Order, Transaction } from "@/types/entities";
 import {
@@ -15,6 +15,7 @@ import {
   AccordionTrigger,
 } from "./ui/accordion";
 import { useUser } from "@/hooks/useUsers";
+import { Button } from "./ui/button";
 
 type UserDetailsSheetProps = {
   order: Order | null;
@@ -33,6 +34,7 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
     order ? order.userId : ""
   );
 
+  const deleteOrder = useDeleteOrder();
   return (
     <Sheet open={!!order} onOpenChange={onClose}>
       <SheetContent
@@ -45,21 +47,34 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
 
         {order && (
           <div className="space-y-6">
-            <div>
-              <p>User ID: {order.userId}</p>
-              {user?.data.lastActiveAt && (
-                <span>
-                  Last Active:{" "}
-                  {format(new Date(user?.data?.lastActiveAt), "dd/MM/yyyy")}
-                  {"\n"}
-                </span>
-              )}
-              <p>
-                Created At: {format(new Date(order.createdAt), "dd/MM/yyyy")}
-              </p>
-              <p>Wallet Balance: {user?.data?.wallet?.balance}</p>
-            </div>
+            {!isUserLoading && (
+              <div>
+                <p>User ID: {order.userId}</p>
+                {user?.data.lastActiveAt && (
+                  <span>
+                    Last Active:{" "}
+                    {format(new Date(user?.data?.lastActiveAt), "dd/MM/yyyy")}
+                    {"\n"}
+                  </span>
+                )}
+                <p>
+                  Created At: {format(new Date(order.createdAt), "dd/MM/yyyy")}
+                </p>
+                <p>Wallet Balance: {user?.data?.wallet?.balance}</p>
+              </div>
+            )}
 
+            {/* delete order button */}
+            <Button
+              onClick={() => {
+                deleteOrder.mutate(order.id);
+                onClose();
+              }}
+              variant="destructive"
+              className="mt-4"
+            >
+              Delete Order
+            </Button>
             {/* showing order details */}
             <div className="border p-4 rounded-md space-y-2">
               <h3 className="text-md font-semibold">Order Information</h3>
