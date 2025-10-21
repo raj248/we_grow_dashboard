@@ -2,9 +2,13 @@ import { useOrders } from "@/hooks/useOrders";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/order";
+import { OrderDetailsSheet } from "@/components/order-details-sheet";
+import { useState } from "react";
 
 export default function OrderPage() {
   const { data: orders, isLoading } = useOrders();
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+
   console.log("In the Orders Page");
   console.log(orders);
   if (isLoading) return <p>Loading...</p>;
@@ -22,8 +26,14 @@ export default function OrderPage() {
         columns={columns}
         data={orders.data}
         onRowClick={(order) => {
-          console.log("order : ", order.id);
+          console.log("Row clicked:", order);
+          setSelectedOrder(order);
         }}
+      />
+
+      <OrderDetailsSheet
+        order={selectedOrder}
+        onClose={() => setSelectedOrder(null)}
       />
     </div>
   );
