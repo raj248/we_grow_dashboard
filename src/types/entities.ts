@@ -38,9 +38,18 @@ export interface Order {
   userId: string;
   planId: string;
   url: string;
-  viewCount: number;
-  likeCount: number;
-  subscriberCount: number;
+
+  initialViewCount: number;
+  initialLikeCount: number;
+  initialSubscriberCount: number;
+
+  finalViewCount: number;
+  finalLikeCount: number;
+  finalSubscriberCount: number;
+
+  progressViewCount: number;
+  progressLikeCount: number;
+  progressSubscriberCount: number;
 
   completedCount: number;
   status: "PENDING" | "ACTIVE" | "COMPLETED" | "CANCELLED";
