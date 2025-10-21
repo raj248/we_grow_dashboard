@@ -1,5 +1,4 @@
 import { useOrders } from "@/hooks/useOrders";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/order";
 import { OrderDetailsSheet } from "@/components/order-details-sheet";
@@ -18,9 +17,6 @@ export default function OrderPage() {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Orders</h1>
-      <Button className="mt-4" onClick={() => {}}>
-        Reload
-      </Button>
 
       <DataTable
         columns={columns}

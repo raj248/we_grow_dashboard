@@ -5,17 +5,24 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useDeleteOrder, useOrdersByUserId } from "@/hooks/useOrders";
-import { useTransactionsByUserId } from "@/hooks/useTransactions";
-import type { Order, Transaction } from "@/types/entities";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./ui/accordion";
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useDeleteOrder, useOrdersByUserId } from "@/hooks/useOrders";
+import { useTransactionsByUserId } from "@/hooks/useTransactions";
 import { useUser } from "@/hooks/useUsers";
-import { Button } from "./ui/button";
+import type { Order, Transaction } from "@/types/entities";
+import { MoreVertical } from "lucide-react";
 
 type UserDetailsSheetProps = {
   order: Order | null;
@@ -35,153 +42,282 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
   );
 
   const deleteOrder = useDeleteOrder();
+
   return (
     <Sheet open={!!order} onOpenChange={onClose}>
       <SheetContent
         side="right"
-        className="w-full h-full max-w-full sm:max-w-full p-6 overflow-y-auto"
+        className="w-full max-w-lg sm:max-w-xl p-6 overflow-y-auto space-y-6"
       >
         <SheetHeader>
-          <SheetTitle>Order Details</SheetTitle>
+          <div className="flex items-center justify-between">
+            <SheetTitle className="text-xl font-semibold">
+              Order Details
+            </SheetTitle>
+
+            {/* Update dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreVertical className="w-5 h-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => {
+                    // placeholder for future update flow
+                    console.log("Update order", order?.id);
+                  }}
+                >
+                  Update Order
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="text-red-600 focus:bg-red-50"
+                  onClick={() => {
+                    if (order) {
+                      deleteOrder.mutate(order.id);
+                      onClose();
+                    }
+                  }}
+                >
+                  Delete Order
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </SheetHeader>
 
         {order && (
-          <div className="space-y-6">
-            {!isUserLoading && (
-              <div>
-                <p>User ID: {order.userId}</p>
-                {user?.data.lastActiveAt && (
-                  <span>
-                    Last Active:{" "}
-                    {format(new Date(user?.data?.lastActiveAt), "dd/MM/yyyy")}
-                    {"\n"}
-                  </span>
-                )}
-                <p>
-                  Created At: {format(new Date(order.createdAt), "dd/MM/yyyy")}
-                </p>
-                <p>Wallet Balance: {user?.data?.wallet?.balance}</p>
+          <div className="space-y-8">
+            {/* USER INFO */}
+            {!isUserLoading && user?.data && (
+              <div className="rounded-lg border bg-card p-4 shadow-sm">
+                <h3 className="text-sm font-medium text-muted-foreground mb-3">
+                  User Information
+                </h3>
+                <dl className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <dt className="font-semibold">User ID</dt>
+                    <dd className="truncate text-muted-foreground">
+                      {order.userId}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold">Wallet</dt>
+                    <dd className="text-muted-foreground">
+                      ₹{user.data.wallet?.balance ?? 0}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold">Last Active</dt>
+                    <dd className="text-muted-foreground">
+                      {user.data.lastActiveAt
+                        ? format(
+                            new Date(user.data.lastActiveAt),
+                            "dd MMM yyyy"
+                          )
+                        : "N/A"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold">Joined</dt>
+                    <dd className="text-muted-foreground">
+                      {format(new Date(order.createdAt), "dd MMM yyyy")}
+                    </dd>
+                  </div>
+                </dl>
               </div>
             )}
 
-            {/* delete order button */}
-            <Button
-              onClick={() => {
-                deleteOrder.mutate(order.id);
-                onClose();
-              }}
-              variant="destructive"
-              className="mt-4"
-            >
-              Delete Order
-            </Button>
-            {/* showing order details */}
-            <div className="border p-4 rounded-md space-y-2">
-              <h3 className="text-md font-semibold">Order Information</h3>
-              <p>Order ID: {order.id}</p>
-              <p>Plan: {order.boostPlan?.title ?? "N/A"}</p>
-              <p>
-                URL:{" "}
-                <a
-                  href={order.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 underline"
-                >
-                  {order.url}
-                </a>
-              </p>
-              <p>Status: {order.status}</p>
-              <p>
-                Created: {format(new Date(order.createdAt), "dd/MM/yyyy HH:mm")}
-              </p>
-              <p>
-                Updated: {format(new Date(order.updatedAt), "dd/MM/yyyy HH:mm")}
-              </p>
-              <div className="grid grid-cols-2 gap-2">
+            {/* ORDER INFO */}
+            <div className="rounded-lg border bg-card p-4 shadow-sm">
+              <h3 className="text-sm font-medium text-muted-foreground mb-3">
+                Order Information
+              </h3>
+
+              <dl className="space-y-2 text-sm">
+                {/* Basic Info */}
                 <div>
-                  <p className="font-medium">Initial Counts:</p>
-                  <p>Views: {order.initialViewCount}</p>
-                  <p>Likes: {order.initialLikeCount}</p>
-                  <p>Subscribers: {order.initialSubscriberCount}</p>
+                  <dt className="font-semibold">Order ID</dt>
+                  <dd className="text-muted-foreground break-all">
+                    {order.id}
+                  </dd>
                 </div>
+
                 <div>
-                  <p className="font-medium">Progress Counts:</p>
-                  <p>Views: {order.progressViewCount}</p>
-                  <p>Likes: {order.progressLikeCount}</p>
-                  <p>Subscribers: {order.progressSubscriberCount}</p>
+                  <dt className="font-semibold">Plan</dt>
+                  <dd className="text-muted-foreground">
+                    {order.boostPlan?.title ?? "N/A"}
+                  </dd>
                 </div>
+
                 <div>
-                  <p className="font-medium">Final Counts:</p>
-                  <p>Views: {order.finalViewCount}</p>
-                  <p>Likes: {order.finalLikeCount}</p>
-                  <p>Subscribers: {order.finalSubscriberCount}</p>
+                  <dt className="font-semibold">URL</dt>
+                  <dd>
+                    <a
+                      href={order.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-700 hover:underline transition-colors break-all"
+                    >
+                      {order.url}
+                    </a>
+                  </dd>
                 </div>
-              </div>
-              <p>
-                Completed: {order.completedCount}{" "}
-                {order.boostPlan?.views ? `/ ${order.boostPlan.views}` : ""}
-              </p>
+
+                {/* Status & Completion */}
+                <div className="grid grid-cols-2 gap-3 mt-2">
+                  <div>
+                    <dt className="font-semibold">Status</dt>
+                    <dd
+                      className={`capitalize font-medium ${
+                        order.status === "COMPLETED"
+                          ? "text-green-600"
+                          : order.status === "ACTIVE"
+                          ? "text-blue-600"
+                          : order.status === "CANCELLED"
+                          ? "text-red-600"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      {order.status.toLowerCase()}
+                    </dd>
+                  </div>
+                </div>
+
+                {/* Counts Breakdown */}
+                <div className="grid grid-cols-4 gap-3 mt-3 text-xs">
+                  {/* Initial */}
+                  <div>
+                    <dt className="font-semibold text-[13px]">Initial</dt>
+                    <dd className="text-muted-foreground">
+                      V:{order.initialViewCount} <br />
+                      L:{order.initialLikeCount} <br />
+                      S:{order.initialSubscriberCount}
+                    </dd>
+                  </div>
+
+                  {/* Progress */}
+                  <div>
+                    <dt className="font-semibold text-[13px]">Progress</dt>
+                    <dd className="text-muted-foreground">
+                      V:{order.progressViewCount} <br />
+                      L:{order.progressLikeCount} <br />
+                      S:{order.progressSubscriberCount}
+                    </dd>
+                  </div>
+
+                  {/* Required (from BoostPlan) */}
+                  <div>
+                    <dt className="font-semibold text-[13px]">Required</dt>
+                    <dd className="text-muted-foreground">
+                      V:{order.boostPlan?.views ?? 0} <br />
+                      L:{order.boostPlan?.likes ?? 0} <br />
+                      S:{order.boostPlan?.subscribers ?? 0}
+                    </dd>
+                  </div>
+
+                  {/* Final */}
+                  <div>
+                    <dt className="font-semibold text-[13px]">Final</dt>
+                    <dd className="text-muted-foreground">
+                      V:{order.finalViewCount} <br />
+                      L:{order.finalLikeCount} <br />
+                      S:{order.finalSubscriberCount}
+                    </dd>
+                  </div>
+                </div>
+
+                {/* Dates */}
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                  <div>
+                    <dt className="font-semibold">Created</dt>
+                    <dd className="text-muted-foreground">
+                      {format(new Date(order.createdAt), "dd/MM/yyyy HH:mm")}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold">Updated</dt>
+                    <dd className="text-muted-foreground">
+                      {format(new Date(order.updatedAt), "dd/MM/yyyy HH:mm")}
+                    </dd>
+                  </div>
+                </div>
+              </dl>
             </div>
 
-            <Accordion type="single" collapsible className="w-full">
-              {/* Transactions */}
+            {/* ACCORDION SECTION */}
+            <Accordion type="single" collapsible className="w-full space-y-4">
               <AccordionItem value="transactions">
                 <AccordionTrigger>Transactions</AccordionTrigger>
                 <AccordionContent>
                   {isTransactionLoading ? (
-                    <p>Loading transactions...</p>
-                  ) : transactions?.success ? (
-                    <ul className="space-y-2">
-                      {transactions.data.map((transaction: Transaction) => (
+                    <p className="text-sm text-muted-foreground">
+                      Loading transactions...
+                    </p>
+                  ) : transactions?.success && transactions.data.length > 0 ? (
+                    <ul className="divide-y divide-border">
+                      {transactions.data.map((t: Transaction) => (
                         <li
-                          key={transaction.id}
-                          className="border p-2 rounded-md text-sm"
+                          key={t.id}
+                          className="p-3 rounded-md hover:bg-muted transition-colors cursor-pointer"
+                          onClick={() =>
+                            console.log("Navigate to transaction", t.id)
+                          }
                         >
-                          <div>Transaction ID: {transaction.transactionId}</div>
-                          <div>Amount: {transaction.amount}</div>
-                          <div>Type: {transaction.type}</div>
-                          <div>Source: {transaction.source}</div>
-                          <div>Created At: {transaction.createdAt}</div>
-                          <div>Status: {transaction.status}</div>
+                          <div className="flex justify-between text-sm font-medium">
+                            <span>{t.type}</span>
+                            <span className="text-muted-foreground">
+                              ₹{t.amount}
+                            </span>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {format(new Date(t.createdAt), "dd MMM yyyy")} •{" "}
+                            {t.status}
+                          </p>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p>No transactions found or an error occurred.</p>
+                    <p className="text-sm text-muted-foreground">
+                      No transactions found.
+                    </p>
                   )}
                 </AccordionContent>
               </AccordionItem>
 
-              {/* Orders */}
               <AccordionItem value="orders">
-                <AccordionTrigger>Orders</AccordionTrigger>
+                <AccordionTrigger>Other Orders</AccordionTrigger>
                 <AccordionContent>
                   {isOrderLoading ? (
-                    <p>Loading Orders...</p>
-                  ) : orders?.success ? (
-                    <ul className="space-y-2">
-                      {orders.data.map((order: Order) => (
+                    <p className="text-sm text-muted-foreground">
+                      Loading orders...
+                    </p>
+                  ) : orders?.success && orders.data.length > 0 ? (
+                    <ul className="divide-y divide-border">
+                      {orders.data.map((o: Order) => (
                         <li
-                          key={order.id}
-                          className="border p-2 rounded-md text-sm"
+                          key={o.id}
+                          className="p-3 rounded-md hover:bg-muted transition-colors cursor-pointer"
+                          onClick={() => console.log("Navigate to order", o.id)}
                         >
-                          <div>
-                            Date:{" "}
-                            {format(new Date(order.createdAt), "dd/MM/yyyy")}
+                          <div className="flex justify-between text-sm font-medium">
+                            <span>{o.boostPlan?.title ?? "Unknown Plan"}</span>
+                            <span className="text-muted-foreground capitalize">
+                              {o.status}
+                            </span>
                           </div>
-                          <div>Status: {order.status}</div>
-                          <div>Plan : {order.boostPlan?.title}</div>
-                          <div>Video : {order.url}</div>
-                          <div>
-                            Progress: {order.completedCount}/{" "}
-                            {order.boostPlan?.views}
-                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {format(new Date(o.createdAt), "dd MMM yyyy")} •{" "}
+                            {o.completedCount}/{o.boostPlan?.views}
+                          </p>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p>No orders found or an error occurred.</p>
+                    <p className="text-sm text-muted-foreground">
+                      No other orders found.
+                    </p>
                   )}
                 </AccordionContent>
               </AccordionItem>
