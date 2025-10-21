@@ -24,6 +24,11 @@ import { useUser } from "@/hooks/useUsers";
 import type { Order, Transaction } from "@/types/entities";
 import { MoreVertical } from "lucide-react";
 import { Eye, ThumbsUp, User } from "lucide-react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 type UserDetailsSheetProps = {
   order: Order | null;
@@ -162,8 +167,50 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
 
                 <div>
                   <dt className="font-semibold">Plan</dt>
-                  <dd className="text-muted-foreground">
-                    {order.boostPlan?.title ?? "N/A"}
+                  <dd>
+                    {order.boostPlan ? (
+                      <HoverCard>
+                        <HoverCardTrigger>
+                          <span className="text-blue-600 hover:underline cursor-pointer transition-colors">
+                            {order.boostPlan.title}
+                          </span>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-64 p-4 space-y-2">
+                          <p className="font-semibold text-sm">
+                            {order.boostPlan.title}
+                          </p>
+                          <div className="text-xs text-muted-foreground">
+                            <p>
+                              <span className="font-medium">Price:</span>{" "}
+                              {order.boostPlan.price}
+                            </p>
+                            <p>
+                              <span className="font-medium">Duration:</span>{" "}
+                              {order.boostPlan.duration} Seconds
+                            </p>
+                            <p>
+                              <span className="font-medium">Reward:</span>{" "}
+                              {order.boostPlan.reward}
+                            </p>
+                            <p>
+                              <span className="font-medium">Views:</span>{" "}
+                              {order.boostPlan.views} |{" "}
+                              <span className="font-medium">Likes:</span>{" "}
+                              {order.boostPlan.likes} |{" "}
+                              <span className="font-medium">Subscribers:</span>{" "}
+                              {order.boostPlan.subscribers}
+                            </p>
+                            {order.boostPlan.description && (
+                              <p className="mt-1 text-xs text-muted-foreground">
+                                {order.boostPlan.description}
+                              </p>
+                            )}
+                          </div>
+                        </HoverCardContent>
+                      </HoverCard>
+                    ) : (
+                      <span className="text-muted-foreground">N/A</span>
+                    )}
                   </dd>
                 </div>
 
@@ -188,15 +235,16 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
                     <dt className="font-semibold text-[13px]">Initial</dt>
                     <dd className="flex flex-col gap-1">
                       <span className="flex items-center gap-1">
-                        <Eye className="w-3 h-3" /> {order.initialViewCount}
+                        <Eye className="w-3 h-3" />{" "}
+                        {order.initialViewCount || "--"}
                       </span>
                       <span className="flex items-center gap-1">
                         <ThumbsUp className="w-3 h-3" />{" "}
-                        {order.initialLikeCount}
+                        {order.initialLikeCount || "--"}
                       </span>
                       <span className="flex items-center gap-1">
                         <User className="w-3 h-3" />{" "}
-                        {order.initialSubscriberCount}
+                        {order.initialSubscriberCount || "--"}
                       </span>
                     </dd>
                   </div>
@@ -206,15 +254,16 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
                     <dt className="font-semibold text-[13px]">Progress</dt>
                     <dd className="flex flex-col gap-1">
                       <span className="flex items-center gap-1">
-                        <Eye className="w-3 h-3" /> {order.progressViewCount}
+                        <Eye className="w-3 h-3" />{" "}
+                        {order.progressViewCount || "--"}
                       </span>
                       <span className="flex items-center gap-1">
                         <ThumbsUp className="w-3 h-3" />{" "}
-                        {order.progressLikeCount}
+                        {order.progressLikeCount || "--"}
                       </span>
                       <span className="flex items-center gap-1">
                         <User className="w-3 h-3" />{" "}
-                        {order.progressSubscriberCount}
+                        {order.progressSubscriberCount || "--"}
                       </span>
                     </dd>
                   </div>
@@ -225,15 +274,15 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
                     <dd className="flex flex-col gap-1">
                       <span className="flex items-center gap-1">
                         <Eye className="w-3 h-3" />{" "}
-                        {order.boostPlan?.views ?? 0}
+                        {order.boostPlan?.views || "--"}
                       </span>
                       <span className="flex items-center gap-1">
                         <ThumbsUp className="w-3 h-3" />{" "}
-                        {order.boostPlan?.likes ?? 0}
+                        {order.boostPlan?.likes || "--"}
                       </span>
                       <span className="flex items-center gap-1">
                         <User className="w-3 h-3" />{" "}
-                        {order.boostPlan?.subscribers ?? 0}
+                        {order.boostPlan?.subscribers || "--"}
                       </span>
                     </dd>
                   </div>
@@ -243,14 +292,16 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
                     <dt className="font-semibold text-[13px]">Final</dt>
                     <dd className="flex flex-col gap-1">
                       <span className="flex items-center gap-1">
-                        <Eye className="w-3 h-3" /> {order.finalViewCount}
+                        <Eye className="w-3 h-3" />{" "}
+                        {order.finalViewCount || "--"}
                       </span>
                       <span className="flex items-center gap-1">
-                        <ThumbsUp className="w-3 h-3" /> {order.finalLikeCount}
+                        <ThumbsUp className="w-3 h-3" />{" "}
+                        {order.finalLikeCount || "--"}
                       </span>
                       <span className="flex items-center gap-1">
                         <User className="w-3 h-3" />{" "}
-                        {order.finalSubscriberCount}
+                        {order.finalSubscriberCount || "--"}
                       </span>
                     </dd>
                   </div>
@@ -261,13 +312,19 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
                   <div>
                     <dt className="font-semibold">Created</dt>
                     <dd>
-                      {format(new Date(order.createdAt), "dd/MM/yyyy HH:mm")}
+                      {format(new Date(order.createdAt), "dd MMM yyyy HH:mm")}
+                      {/* {user.data.lastActiveAt
+                        ? format(
+                            new Date(user.data.lastActiveAt),
+                            "dd MMM yyyy"
+                          )
+                        : "N/A"} */}
                     </dd>
                   </div>
                   <div>
                     <dt className="font-semibold">Updated</dt>
                     <dd>
-                      {format(new Date(order.updatedAt), "dd/MM/yyyy HH:mm")}
+                      {format(new Date(order.updatedAt), "dd MMM yyyy HH:mm")}
                     </dd>
                   </div>
                 </div>
@@ -293,16 +350,62 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
                             console.log("Navigate to transaction", t.id)
                           }
                         >
-                          <div className="flex justify-between text-sm font-medium">
-                            <span>{t.type}</span>
-                            <span className="text-muted-foreground">
-                              ₹{t.amount}
+                          {/* Top Row: Type & Amount */}
+                          <div className="flex justify-between items-center text-sm font-medium">
+                            <span
+                              className={`px-2 py-0.5 rounded text-xs font-semibold capitalize ${
+                                t.type === "CREDIT"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-red-100 text-red-800"
+                              }`}
+                            >
+                              {t.type.toLowerCase()}
+                            </span>
+                            <span
+                              className={`font-semibold ${
+                                t.type === "CREDIT"
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
+                              {t.type === "CREDIT" ? "+" : "-"}₹{t.amount}
                             </span>
                           </div>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {format(new Date(t.createdAt), "dd MMM yyyy")} •{" "}
-                            {t.status}
-                          </p>
+
+                          {/* Details */}
+                          <div className="mt-1 text-xs text-muted-foreground flex flex-col gap-0.5">
+                            <span>
+                              <span className="font-medium">Source:</span>{" "}
+                              {t.source}
+                            </span>
+                            <span>
+                              <span className="font-medium">
+                                Transaction ID:
+                              </span>{" "}
+                              {t.transactionId}
+                            </span>
+                            <span>
+                              <span className="font-medium">Date:</span>{" "}
+                              {format(
+                                new Date(t.createdAt),
+                                "dd MMM yyyy, HH:mm"
+                              )}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <span className="font-medium">Status:</span>
+                              <span
+                                className={`px-2 py-0.5 rounded text-xs font-semibold capitalize ${
+                                  t.status === "SUCCESS"
+                                    ? "bg-green-100 text-green-800"
+                                    : t.status === "PENDING"
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : "bg-red-100 text-red-800"
+                                }`}
+                              >
+                                {t.status.toLowerCase()}
+                              </span>
+                            </span>
+                          </div>
                         </li>
                       ))}
                     </ul>
