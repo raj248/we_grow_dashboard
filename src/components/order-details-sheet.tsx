@@ -23,6 +23,7 @@ import { useTransactionsByUserId } from "@/hooks/useTransactions";
 import { useUser } from "@/hooks/useUsers";
 import type { Order, Transaction } from "@/types/entities";
 import { MoreVertical } from "lucide-react";
+import { Eye, ThumbsUp, User } from "lucide-react";
 
 type UserDetailsSheetProps = {
   order: Order | null;
@@ -130,8 +131,23 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
             )}
 
             {/* ORDER INFO */}
-            <div className="rounded-lg border bg-card p-4 shadow-sm">
-              <h3 className="text-sm font-medium text-muted-foreground mb-3">
+            <div className="relative rounded-lg border bg-card p-4 shadow-sm">
+              {/* Status Badge */}
+              <span
+                className={`absolute top-4 right-4 px-2 py-1 text-xs font-semibold rounded-full capitalize ${
+                  order.status === "COMPLETED"
+                    ? "bg-green-100 text-green-800"
+                    : order.status === "ACTIVE"
+                    ? "bg-blue-100 text-blue-800"
+                    : order.status === "CANCELLED"
+                    ? "bg-red-100 text-red-800"
+                    : "bg-yellow-100 text-yellow-800"
+                }`}
+              >
+                {order.status.toLowerCase()}
+              </span>
+
+              <h3 className="text-sm font-medium text-muted-foreground mb-3 mt-1">
                 Order Information
               </h3>
 
@@ -165,80 +181,92 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
                   </dd>
                 </div>
 
-                {/* Status & Completion */}
-                <div className="grid grid-cols-2 gap-3 mt-2">
-                  <div>
-                    <dt className="font-semibold">Status</dt>
-                    <dd
-                      className={`capitalize font-medium ${
-                        order.status === "COMPLETED"
-                          ? "text-green-600"
-                          : order.status === "ACTIVE"
-                          ? "text-blue-600"
-                          : order.status === "CANCELLED"
-                          ? "text-red-600"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      {order.status.toLowerCase()}
-                    </dd>
-                  </div>
-                </div>
-
-                {/* Counts Breakdown */}
-                <div className="grid grid-cols-4 gap-3 mt-3 text-xs">
+                {/* Counts Breakdown with Icons */}
+                <div className="grid grid-cols-4 gap-3 mt-3 text-xs text-muted-foreground">
                   {/* Initial */}
-                  <div>
+                  <div className="space-y-1">
                     <dt className="font-semibold text-[13px]">Initial</dt>
-                    <dd className="text-muted-foreground">
-                      V:{order.initialViewCount} <br />
-                      L:{order.initialLikeCount} <br />
-                      S:{order.initialSubscriberCount}
+                    <dd className="flex flex-col gap-1">
+                      <span className="flex items-center gap-1">
+                        <Eye className="w-3 h-3" /> {order.initialViewCount}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <ThumbsUp className="w-3 h-3" />{" "}
+                        {order.initialLikeCount}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <User className="w-3 h-3" />{" "}
+                        {order.initialSubscriberCount}
+                      </span>
                     </dd>
                   </div>
 
                   {/* Progress */}
-                  <div>
+                  <div className="space-y-1">
                     <dt className="font-semibold text-[13px]">Progress</dt>
-                    <dd className="text-muted-foreground">
-                      V:{order.progressViewCount} <br />
-                      L:{order.progressLikeCount} <br />
-                      S:{order.progressSubscriberCount}
+                    <dd className="flex flex-col gap-1">
+                      <span className="flex items-center gap-1">
+                        <Eye className="w-3 h-3" /> {order.progressViewCount}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <ThumbsUp className="w-3 h-3" />{" "}
+                        {order.progressLikeCount}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <User className="w-3 h-3" />{" "}
+                        {order.progressSubscriberCount}
+                      </span>
                     </dd>
                   </div>
 
-                  {/* Required (from BoostPlan) */}
-                  <div>
+                  {/* Required (BoostPlan) */}
+                  <div className="space-y-1">
                     <dt className="font-semibold text-[13px]">Required</dt>
-                    <dd className="text-muted-foreground">
-                      V:{order.boostPlan?.views ?? 0} <br />
-                      L:{order.boostPlan?.likes ?? 0} <br />
-                      S:{order.boostPlan?.subscribers ?? 0}
+                    <dd className="flex flex-col gap-1">
+                      <span className="flex items-center gap-1">
+                        <Eye className="w-3 h-3" />{" "}
+                        {order.boostPlan?.views ?? 0}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <ThumbsUp className="w-3 h-3" />{" "}
+                        {order.boostPlan?.likes ?? 0}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <User className="w-3 h-3" />{" "}
+                        {order.boostPlan?.subscribers ?? 0}
+                      </span>
                     </dd>
                   </div>
 
                   {/* Final */}
-                  <div>
+                  <div className="space-y-1">
                     <dt className="font-semibold text-[13px]">Final</dt>
-                    <dd className="text-muted-foreground">
-                      V:{order.finalViewCount} <br />
-                      L:{order.finalLikeCount} <br />
-                      S:{order.finalSubscriberCount}
+                    <dd className="flex flex-col gap-1">
+                      <span className="flex items-center gap-1">
+                        <Eye className="w-3 h-3" /> {order.finalViewCount}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <ThumbsUp className="w-3 h-3" /> {order.finalLikeCount}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <User className="w-3 h-3" />{" "}
+                        {order.finalSubscriberCount}
+                      </span>
                     </dd>
                   </div>
                 </div>
 
                 {/* Dates */}
-                <div className="grid grid-cols-2 gap-3 mt-3">
+                <div className="grid grid-cols-2 gap-3 mt-3 text-sm text-muted-foreground">
                   <div>
                     <dt className="font-semibold">Created</dt>
-                    <dd className="text-muted-foreground">
+                    <dd>
                       {format(new Date(order.createdAt), "dd/MM/yyyy HH:mm")}
                     </dd>
                   </div>
                   <div>
                     <dt className="font-semibold">Updated</dt>
-                    <dd className="text-muted-foreground">
+                    <dd>
                       {format(new Date(order.updatedAt), "dd/MM/yyyy HH:mm")}
                     </dd>
                   </div>
