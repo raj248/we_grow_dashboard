@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataTablePagination } from "../pagination";
 
 interface DataTableProps<TData, TValue> {
@@ -36,6 +36,15 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState<ColumnFiltersState>([]);
 
+  const [pagination, setPagination] = useState(() => {
+    const saved = localStorage.getItem("orders-pagination");
+    return saved ? JSON.parse(saved) : { pageIndex: 0, pageSize: 10 };
+  });
+
+  useEffect(() => {
+    localStorage.setItem("orders-pagination", JSON.stringify(pagination));
+  }, [pagination]);
+
   const table = useReactTable({
     data,
     columns,
@@ -45,9 +54,12 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       globalFilter,
+      pagination,
     },
+    onPaginationChange: setPagination, // update pagination state
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: "includesString",
+    autoResetPageIndex: false,
   });
 
   return (
