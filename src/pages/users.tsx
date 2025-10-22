@@ -1,5 +1,4 @@
 import { useUsers } from "@/hooks/useUsers";
-import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/user";
 import { useState } from "react";
@@ -16,13 +15,10 @@ export default function UsersPage() {
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Users</h1>
 
-      <Button className="mt-4" onClick={() => {}}>
-        Reload
-      </Button>
-
       <DataTable
         columns={columns}
         data={users.data}
+        tableType="user"
         onRowClick={(user) => setSelectedUser(user)}
       />
 

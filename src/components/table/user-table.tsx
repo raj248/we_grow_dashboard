@@ -1,6 +1,7 @@
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  type FilterFn,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -24,6 +25,7 @@ import { DataTablePagination } from "../pagination";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  tableType: string;
   onRowClick?: (row: TData) => void;
   inputLabel?: string;
 }
@@ -31,18 +33,22 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  tableType,
   onRowClick,
   inputLabel,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState<ColumnFiltersState>([]);
 
   const [pagination, setPagination] = useState(() => {
-    const saved = localStorage.getItem("orders-pagination");
+    const saved = localStorage.getItem(`${tableType}s-pagination`);
     return saved ? JSON.parse(saved) : { pageIndex: 0, pageSize: 10 };
   });
 
   useEffect(() => {
-    localStorage.setItem("orders-pagination", JSON.stringify(pagination));
+    localStorage.setItem(
+      `${tableType}s-pagination`,
+      JSON.stringify(pagination)
+    );
   }, [pagination]);
 
   const table = useReactTable({
@@ -67,7 +73,12 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center py-4">
         <Input
           placeholder={inputLabel ?? "Filter By User ID or Balance..."}
-          onChange={(event) => table.setGlobalFilter(event.target.value)}
+          onChange={(event) => {
+            table.setGlobalFilter(event.target.value);
+            setPagination((page: any) => {
+              return { ...page, pageIndex: 0 };
+            });
+          }}
           className="w-[60%]"
         />
       </div>

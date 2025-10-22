@@ -425,22 +425,113 @@ export function OrderDetailsSheet({ order, onClose }: UserDetailsSheetProps) {
                       Loading orders...
                     </p>
                   ) : orders?.success && orders.data.length > 0 ? (
-                    <ul className="divide-y divide-border">
+                    <ul className="space-y-3">
                       {orders.data.map((o: Order) => (
                         <li
                           key={o.id}
-                          className="p-3 rounded-md hover:bg-muted transition-colors cursor-pointer"
+                          className="border p-3 rounded-md text-sm space-y-2 hover:bg-muted transition-colors cursor-pointer"
                           onClick={() => console.log("Navigate to order", o.id)}
                         >
-                          <div className="flex justify-between text-sm font-medium">
-                            <span>{o.boostPlan?.title ?? "Unknown Plan"}</span>
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">
+                              {o.boostPlan?.title ?? "Unknown Plan"}
+                            </span>
                             <span className="text-muted-foreground capitalize">
                               {o.status}
                             </span>
                           </div>
+
+                          <div className="grid grid-cols-4 gap-3 mt-2 text-xs text-muted-foreground">
+                            {/* Initial */}
+                            <div className="space-y-1">
+                              <dt className="font-semibold text-[13px]">
+                                Initial
+                              </dt>
+                              <dd className="flex flex-col gap-1">
+                                <span className="flex items-center gap-1">
+                                  <Eye className="w-3 h-3" />{" "}
+                                  {o.initialViewCount || "--"}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <ThumbsUp className="w-3 h-3" />{" "}
+                                  {o.initialLikeCount || "--"}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <User className="w-3 h-3" />{" "}
+                                  {o.initialSubscriberCount || "--"}
+                                </span>
+                              </dd>
+                            </div>
+
+                            {/* Progress */}
+                            <div className="space-y-1">
+                              <dt className="font-semibold text-[13px]">
+                                Progress
+                              </dt>
+                              <dd className="flex flex-col gap-1">
+                                <span className="flex items-center gap-1">
+                                  <Eye className="w-3 h-3" />{" "}
+                                  {o.progressViewCount || "--"}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <ThumbsUp className="w-3 h-3" />{" "}
+                                  {o.progressLikeCount || "--"}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <User className="w-3 h-3" />{" "}
+                                  {o.progressSubscriberCount || "--"}
+                                </span>
+                              </dd>
+                            </div>
+
+                            {/* Required (BoostPlan) */}
+                            <div className="space-y-1">
+                              <dt className="font-semibold text-[13px]">
+                                Required
+                              </dt>
+                              <dd className="flex flex-col gap-1">
+                                <span className="flex items-center gap-1">
+                                  <Eye className="w-3 h-3" />{" "}
+                                  {o.boostPlan?.views || "--"}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <ThumbsUp className="w-3 h-3" />{" "}
+                                  {o.boostPlan?.likes || "--"}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <User className="w-3 h-3" />{" "}
+                                  {o.boostPlan?.subscribers || "--"}
+                                </span>
+                              </dd>
+                            </div>
+
+                            {/* Final */}
+                            <div className="space-y-1">
+                              <dt className="font-semibold text-[13px]">
+                                Final
+                              </dt>
+                              <dd className="flex flex-col gap-1">
+                                <span className="flex items-center gap-1">
+                                  <Eye className="w-3 h-3" />{" "}
+                                  {o.finalViewCount || "--"}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <ThumbsUp className="w-3 h-3" />{" "}
+                                  {o.finalLikeCount || "--"}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <User className="w-3 h-3" />{" "}
+                                  {o.finalSubscriberCount || "--"}
+                                </span>
+                              </dd>
+                            </div>
+                          </div>
+
                           <p className="text-xs text-muted-foreground mt-1">
-                            {format(new Date(o.createdAt), "dd MMM yyyy")} •{" "}
-                            {o.completedCount}/{o.boostPlan?.views}
+                            Created:{" "}
+                            {format(new Date(o.createdAt), "dd MMM yyyy")} •
+                            Updated:{" "}
+                            {format(new Date(o.updatedAt), "dd MMM yyyy")}
                           </p>
                         </li>
                       ))}

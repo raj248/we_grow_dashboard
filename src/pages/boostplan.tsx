@@ -48,6 +48,7 @@ export default function BoostPlanPage() {
           },
         ]}
         data={boostPlans.data}
+        tableType="boost-plan"
         onRowClick={(boostPlan) => {
           console.log("boost plan : ", boostPlan.id);
         }}

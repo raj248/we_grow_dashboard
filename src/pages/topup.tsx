@@ -81,6 +81,7 @@ export default function TopupPage() {
           },
         ]}
         data={topupOptions.data}
+        tableType="topup"
         onRowClick={(topupOption) => {
           console.log("topup option : ", topupOption.id);
         }}

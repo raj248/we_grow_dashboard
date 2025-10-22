@@ -22,6 +22,8 @@ export default function TransactionPage() {
       <DataTable
         columns={columns}
         data={transactions.data}
+        tableType="transaction"
+        inputLabel="Filter by Transaction ID or User ID"
         onRowClick={(transaction) => {
           console.log("transaction : ", transaction.transactionId);
         }}

@@ -21,6 +21,7 @@ export default function OrderPage() {
       <DataTable
         columns={columns}
         data={orders.data}
+        tableType="order"
         onRowClick={(order) => {
           console.log("Row clicked:", order);
           setSelectedOrder(order);
