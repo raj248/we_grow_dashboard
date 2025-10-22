@@ -37,6 +37,7 @@ export function DataTable<TData, TValue>({
   inputLabel,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const [pagination, setPagination] = useState(() => {
     const saved = localStorage.getItem(`${tableType}s-pagination`);
@@ -60,27 +61,44 @@ export function DataTable<TData, TValue>({
     state: {
       globalFilter,
       pagination,
+      columnFilters,
     },
     onPaginationChange: setPagination, // update pagination state
     onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
     globalFilterFn: "includesString",
     autoResetPageIndex: false,
   });
 
   return (
     <div className="rounded-md border mt-2">
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-4">
+        {/* Global search */}
         <Input
           placeholder={inputLabel ?? "Filter By User ID or Balance..."}
           onChange={(event) => {
             table.setGlobalFilter(event.target.value);
-            setPagination((page: any) => {
-              return { ...page, pageIndex: 0 };
-            });
+            setPagination((page: any) => ({ ...page, pageIndex: 0 }));
           }}
           className="w-[60%]"
         />
+
+        {/* Plan filter */}
+        {tableType === "order" && (
+          <Input
+            placeholder="Filter By Plan..."
+            onChange={(event) => {
+              // Get the planId column and set its filter
+              table.setColumnFilters([
+                { id: "planId", value: event.target.value },
+              ]);
+              setPagination((page: any) => ({ ...page, pageIndex: 0 }));
+            }}
+            className="w-[40%]"
+          />
+        )}
       </div>
+
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

@@ -40,6 +40,17 @@ export const columns: ColumnDef<Order>[] = [
     accessorKey: "planId",
     header: "Plan Type",
     cell: ({ row }) => row.original.boostPlan?.title ?? "N/A",
+    // optional: enable filtering
+    filterFn: (row, id, value) => {
+      id; // column id
+      const planTitle = row.original.boostPlan?.title ?? "";
+      console.log(
+        planTitle,
+        value,
+        planTitle.toLowerCase().includes((value as string).toLowerCase())
+      );
+      return planTitle.toLowerCase().includes((value as string).toLowerCase());
+    },
   },
   {
     accessorKey: "url",
