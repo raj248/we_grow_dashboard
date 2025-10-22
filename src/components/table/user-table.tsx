@@ -127,6 +127,40 @@ export function DataTable<TData, TValue>({
             </SelectContent>
           </Select>
         )}
+
+        {/* Plan filter */}
+        {tableType === "order" && (
+          <Select
+            onValueChange={(value) => {
+              // If "all" is selected, clear the filter
+              table.setColumnFilters([
+                { id: "status", value: value === "all" ? undefined : value },
+              ]);
+              setPagination((page: any) => ({ ...page, pageIndex: 0 }));
+            }}
+            value={
+              (table.getColumn("status")?.getFilterValue() as
+                | string
+                | undefined)
+                ? (table.getColumn("status")?.getFilterValue() as string)
+                : "all"
+            }
+          >
+            <SelectTrigger className="w-[40%]">
+              <SelectValue placeholder="Filter By Plan..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem key={"all"} value="all">
+                All Plans
+              </SelectItem>
+              {["active", "completed", "cancelled", "expired"].map((plan) => (
+                <SelectItem key={plan} value={plan}>
+                  {plan}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
       <Table>

@@ -44,11 +44,7 @@ export const columns: ColumnDef<Order>[] = [
     filterFn: (row, id, value) => {
       id; // column id
       const planTitle = row.original.boostPlan?.title ?? "";
-      console.log(
-        planTitle,
-        value,
-        planTitle.toLowerCase().includes((value as string).toLowerCase())
-      );
+
       return planTitle.toLowerCase().includes((value as string).toLowerCase());
     },
   },
