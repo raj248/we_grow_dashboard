@@ -17,9 +17,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { DataTablePagination } from "../pagination";
+import { useBoostPlans } from "@/hooks/useBoostPlan";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,6 +47,8 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState<ColumnFiltersState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const { data: boostPlans, isLoading: isBoostPlansLoading } = useBoostPlans();
 
   const [pagination, setPagination] = useState(() => {
     const saved = localStorage.getItem(`${tableType}s-pagination`);
@@ -84,18 +95,37 @@ export function DataTable<TData, TValue>({
         />
 
         {/* Plan filter */}
-        {tableType === "order" && (
-          <Input
-            placeholder="Filter By Plan..."
-            onChange={(event) => {
-              // Get the planId column and set its filter
+        {tableType === "order" && !isBoostPlansLoading && boostPlans?.data && (
+          <Select
+            onValueChange={(value) => {
+              // If "all" is selected, clear the filter
               table.setColumnFilters([
-                { id: "planId", value: event.target.value },
+                { id: "planId", value: value === "all" ? undefined : value },
               ]);
               setPagination((page: any) => ({ ...page, pageIndex: 0 }));
             }}
-            className="w-[40%]"
-          />
+            value={
+              (table.getColumn("planId")?.getFilterValue() as
+                | string
+                | undefined)
+                ? (table.getColumn("planId")?.getFilterValue() as string)
+                : "all"
+            }
+          >
+            <SelectTrigger className="w-[40%]">
+              <SelectValue placeholder="Filter By Plan..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem key={"all"} value="all">
+                All Plans
+              </SelectItem>
+              {boostPlans.data.map((plan) => (
+                <SelectItem key={plan.id} value={plan.title}>
+                  {plan.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         )}
       </div>
 
