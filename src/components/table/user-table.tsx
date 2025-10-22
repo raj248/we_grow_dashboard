@@ -1,7 +1,6 @@
 import {
   type ColumnDef,
   type ColumnFiltersState,
-  type FilterFn,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,

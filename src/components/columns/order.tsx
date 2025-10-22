@@ -3,6 +3,12 @@ import type { Order } from "@/types/entities";
 import type { ColumnDef } from "@tanstack/react-table";
 import { detectYouTubeLinkType } from "@/utils/youtube-link-identifier";
 import type { JSX } from "react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card";
+import { UserHoverContent } from "../UserHoverContent";
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -12,6 +18,23 @@ export const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "userId",
     header: "User ID",
+    cell: ({ row }) => {
+      const userId = row.getValue("userId") as string;
+
+      return (
+        <HoverCard>
+          <HoverCardTrigger>
+            <span className="text-blue-600 hover:underline cursor-pointer">
+              {userId}
+            </span>
+          </HoverCardTrigger>
+
+          <HoverCardContent className="w-64 p-4 space-y-2">
+            <UserHoverContent userId={userId} />
+          </HoverCardContent>
+        </HoverCard>
+      );
+    },
   },
   {
     accessorKey: "planId",
