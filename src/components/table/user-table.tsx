@@ -147,13 +147,13 @@ export function DataTable<TData, TValue>({
             }
           >
             <SelectTrigger className="w-[40%]">
-              <SelectValue placeholder="Filter By Plan..." />
+              <SelectValue placeholder="Filter By Status..." />
             </SelectTrigger>
             <SelectContent>
               <SelectItem key={"all"} value="all">
-                All Plans
+                All Status
               </SelectItem>
-              {["active", "completed", "cancelled", "expired"].map((plan) => (
+              {["Active", "Completed", "Cancelled", "Expired"].map((plan) => (
                 <SelectItem key={plan} value={plan}>
                   {plan}
                 </SelectItem>
