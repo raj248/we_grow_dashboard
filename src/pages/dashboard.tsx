@@ -1,15 +1,52 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProtectAdminRoute } from "@/hooks/useProtectAdminRoute";
 import { useOrders } from "@/hooks/useOrders";
 import dayjs from "dayjs";
 import type { Order } from "@/types/entities";
+import { refreshAllOrders } from "@/services/orderApi";
+
+import { toast } from "sonner";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 export default function Dashboard() {
   useProtectAdminRoute();
 
-  const { data: orders, isLoading } = useOrders();
+  const { data: orders, isLoading, refetch } = useOrders();
+  const [isRefreshingAll, setIsRefreshingAll] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleRefreshAll = async () => {
+    setOpenDialog(false); // close dialog
+    setIsRefreshingAll(true);
+    try {
+      const res = await refreshAllOrders(); // your API call
+      if (res.success) {
+        toast.success("All orders refreshed ✅");
+        refetch?.(); // refresh your orders data
+      } else {
+        toast.error("Failed to refresh all orders ❌");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error refreshing orders ❌");
+    } finally {
+      setIsRefreshingAll(false);
+    }
+  };
 
   // Orders in last 24 hours
   const ordersLast24Hrs = useMemo(() => {
@@ -37,7 +74,6 @@ export default function Dashboard() {
     return orders.data.filter((o) => o.status !== "COMPLETED");
   }, [orders]);
 
-  // Status badge colors
   const statusColors: Record<string, string> = {
     PENDING: "bg-yellow-100 text-yellow-800",
     ACTIVE: "bg-blue-100 text-blue-700",
@@ -55,33 +91,28 @@ export default function Dashboard() {
       color: string;
     }[] = [];
 
-    // Add views if boostPlan.views > 0
     if (order.boostPlan.views > 0) {
       metrics.push({
         label: "Views",
         progress: order.progressViewCount ?? 0,
         total: order.boostPlan.views ?? 0,
-        color: "#3B82F6", // Blue
+        color: "#3B82F6",
       });
     }
-
-    // Add likes if boostPlan.likes > 0
     if (order.boostPlan.likes > 0) {
       metrics.push({
         label: "Likes",
         progress: order.progressLikeCount ?? 0,
         total: order.boostPlan.likes ?? 0,
-        color: "#EF4444", // Red
+        color: "#EF4444",
       });
     }
-
-    // Add subscribers if boostPlan.subscribers > 0
     if (order.boostPlan.subscribers > 0) {
       metrics.push({
         label: "Subscribers",
         progress: order.progressSubscriberCount ?? 0,
         total: order.boostPlan.subscribers ?? 0,
-        color: "#10B981", // Green
+        color: "#10B981",
       });
     }
 
@@ -90,7 +121,6 @@ export default function Dashboard() {
         key={order.id}
         className="flex flex-col gap-2 p-3 shadow-sm rounded-md border border-border"
       >
-        {/* Header */}
         <div className="flex justify-between items-center">
           <span className="font-semibold">Order #{order.id}</span>
           <span
@@ -102,7 +132,6 @@ export default function Dashboard() {
           </span>
         </div>
 
-        {/* User & Plan */}
         {order.userId && (
           <span className="text-sm text-muted-foreground">
             User: {order.userId}
@@ -114,12 +143,10 @@ export default function Dashboard() {
           </span>
         )}
 
-        {/* Started date */}
         <span className="text-sm text-muted-foreground">
           Started: {dayjs(order.createdAt).format("HH:mm DD/MM")}
         </span>
 
-        {/* Metrics */}
         {metrics.map((metric) => {
           const percentage = Math.min(
             100,
@@ -151,6 +178,33 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col gap-4 p-4 md:p-6">
+      <div className="flex justify-end">
+        <>
+          <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" disabled={isRefreshingAll}>
+                Refresh All Orders
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Refresh All Orders</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to refresh all orders now? This will
+                  fetch the latest stats for every order.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleRefreshAll}>
+                  Refresh
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
+      </div>
+
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {isLoading ? (
@@ -200,6 +254,7 @@ export default function Dashboard() {
 
       {/* Orders Lists */}
       <div className="grid gap-4 sm:grid-cols-3">
+        {/* Last 24H */}
         <Card>
           <CardHeader>
             <CardTitle>Orders Last 24H</CardTitle>
@@ -219,6 +274,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
+        {/* Late Orders */}
         <Card>
           <CardHeader>
             <CardTitle>Late Orders</CardTitle>
@@ -238,6 +294,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
+        {/* Active Orders */}
         <Card>
           <CardHeader>
             <CardTitle>Active Orders</CardTitle>

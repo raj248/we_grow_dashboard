@@ -115,3 +115,9 @@ export const deleteOrder = async (id: string): Promise<APIResponse<Order>> => {
   const res = await axios.delete<APIResponse<Order>>(`${API_URL}/order/${id}`);
   return res.data;
 };
+
+// refresh all orders
+export const refreshAllOrders = async (): Promise<APIResponse<null>> => {
+  const res = await axios.post<APIResponse<null>>(`${API_URL}/run-worker-now`);
+  return res.data;
+};

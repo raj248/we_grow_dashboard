@@ -12,6 +12,7 @@ import Login from "@/pages/login";
 import { ThemeProvider } from "./components/theme/theme-provider";
 import { ConfirmDialogProvider } from "./components/modals/global-confirm-dialog";
 import { AuthProvider } from "@/context/auth-context";
+import { Toaster } from "sonner";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/Settings" element={<Settings />} />
               </Route>
             </Routes>
+            <Toaster />
           </BrowserRouter>
         </ConfirmDialogProvider>
       </AuthProvider>
