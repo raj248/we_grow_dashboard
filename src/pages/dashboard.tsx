@@ -88,7 +88,7 @@ export default function Dashboard() {
     return (
       <div
         key={order.id}
-        className="flex flex-col gap-2 p-3 bg-white shadow-sm rounded-md border border-gray-100"
+        className="flex flex-col gap-2 p-3 shadow-sm rounded-md border border-border"
       >
         {/* Header */}
         <div className="flex justify-between items-center">
@@ -133,7 +133,7 @@ export default function Dashboard() {
                   {metric.progress} / {metric.total}
                 </span>
               </div>
-              <div className="h-2 w-full bg-gray-200 rounded-full">
+              <div className="h-2 w-full bg-sidebar-accent rounded-full">
                 <div
                   className="h-2 rounded-full"
                   style={{
