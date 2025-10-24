@@ -25,6 +25,7 @@ export interface Transaction {
   id: string;
   userId: string;
   type: "CREDIT" | "DEBIT";
+  topUpId: string | null;
   amount: number;
   source: string;
   transactionId: string;

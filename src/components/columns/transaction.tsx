@@ -49,6 +49,14 @@ export const columns: ColumnDef<Transaction>[] = [
     },
   },
   {
+    accessorKey: "topUpId",
+    header: "Top Up ID",
+    cell: ({ row }) => {
+      const topup = row.getValue("topUpId");
+      return `${topup ?? "--"}`;
+    },
+  },
+  {
     accessorKey: "type",
     header: "Type",
   },
