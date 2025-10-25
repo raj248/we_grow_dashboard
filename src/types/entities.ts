@@ -1,3 +1,11 @@
+export interface Admin {
+  id: string;
+  username: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface User {
   id: string;
   userId: string;

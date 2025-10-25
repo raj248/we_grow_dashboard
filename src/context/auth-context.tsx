@@ -1,4 +1,5 @@
 // src/context/auth-context.tsx
+import { checkAdminSession, logoutAdmin } from "@/services/adminApi";
 import { createContext, useContext, useEffect, useState } from "react";
 // import { checkAdminSession, logoutAdmin } from "@/lib/api";
 
@@ -17,15 +18,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const refresh = async () => {
     setLoading(true);
-    // const res = await checkAdminSession();
-    const res = { success: true, data: { isAdmin: true } }; // dummy
+    const res = await checkAdminSession();
+    // const res = { success: true, data: { isAdmin: true } }; // dummy
     setIsAdmin(res.success && res.data?.isAdmin === true);
     setLoading(false);
   };
 
   const logout = async () => {
-    // await logoutAdmin(); // API call to clear cookie/session
-    // setLoading(true);
+    await logoutAdmin(); // API call to clear cookie/session
+    setLoading(true);
     setIsAdmin(false);
   };
 
