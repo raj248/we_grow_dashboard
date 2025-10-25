@@ -6,13 +6,13 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 // ---------------- Admin Auth ------------------
 export const loginAdmin = async (
-  email: string,
+  username: string,
   password: string
 ): Promise<APIResponse<Admin>> => {
   const res = await axios.post<APIResponse<Admin>>(
     `${API_URL}/admin/login`,
     {
-      email,
+      username,
       password,
     },
     { withCredentials: true }

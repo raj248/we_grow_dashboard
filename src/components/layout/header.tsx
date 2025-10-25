@@ -3,8 +3,8 @@ import { Separator } from "../ui/separator";
 import { AppBreadcrumbs } from "./app-breadcrumbs";
 import { ModeToggle } from "../theme/mode-toggle";
 import { Button } from "../ui/button";
-// import { logoutAdmin } from '@/lib/api'
 import { useNavigate } from "react-router-dom";
+import { logoutAdmin } from "@/services/adminApi";
 
 function Header() {
   const navigator = useNavigate();
@@ -37,7 +37,7 @@ function Header() {
             size="sm"
             className="hidden sm:flex cursor-pointer"
             onClick={() => {
-              // logoutAdmin()
+              logoutAdmin();
               navigator("/");
             }}
           >

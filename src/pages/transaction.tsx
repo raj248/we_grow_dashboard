@@ -2,11 +2,14 @@ import { useTransactions } from "@/hooks/useTransactions";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/transaction";
+import { useProtectAdminRoute } from "@/hooks/useProtectAdminRoute";
 
 export default function TransactionPage() {
   const { data: transactions, isLoading } = useTransactions();
   console.log("In the Transaction Page");
   console.log(transactions);
+  useProtectAdminRoute();
+
   if (isLoading) return <p>Loading...</p>;
 
   if (!transactions?.success)

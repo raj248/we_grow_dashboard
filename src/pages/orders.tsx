@@ -3,10 +3,12 @@ import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/order";
 import { OrderDetailsSheet } from "@/components/order-details-sheet";
 import { useState } from "react";
+import { useProtectAdminRoute } from "@/hooks/useProtectAdminRoute";
 
 export default function OrderPage() {
   const { data: orders, isLoading } = useOrders();
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  useProtectAdminRoute();
 
   console.log("In the Orders Page");
   console.log(orders);

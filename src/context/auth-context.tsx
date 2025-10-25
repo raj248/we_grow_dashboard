@@ -18,7 +18,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const refresh = async () => {
     setLoading(true);
-    const res = await checkAdminSession();
+    const res = await checkAdminSession().catch((err) => {
+      console.error(err);
+      return { success: false, data: null };
+    });
     // const res = { success: true, data: { isAdmin: true } }; // dummy
     setIsAdmin(res.success && res.data?.isAdmin === true);
     setLoading(false);

@@ -6,7 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { useProtectAdminRoute } from "@/hooks/useProtectAdminRoute";
 
 export default function Settings() {
@@ -27,7 +33,6 @@ export default function Settings() {
           <CardTitle>Test Management Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-
           {/* Auto-publish toggle */}
           <div className="flex items-center justify-between">
             <Label>Auto-publish test papers on creation</Label>
@@ -37,7 +42,10 @@ export default function Settings() {
           {/* Default test time limit */}
           <div className="flex flex-col gap-1">
             <Label>Default test time limit (minutes)</Label>
-            <Select value={defaultTimeLimit} onValueChange={setDefaultTimeLimit}>
+            <Select
+              value={defaultTimeLimit}
+              onValueChange={setDefaultTimeLimit}
+            >
               <SelectTrigger className="w-[120px]">
                 <SelectValue placeholder="Select time" />
               </SelectTrigger>

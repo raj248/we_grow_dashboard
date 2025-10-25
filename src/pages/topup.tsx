@@ -8,12 +8,14 @@ import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/topop";
 import { TopupDialog } from "@/components/TopUpDialog";
 import type { TopupOptions } from "@/types/entities";
+import { useProtectAdminRoute } from "@/hooks/useProtectAdminRoute";
 
 export default function TopupPage() {
   const { data: topupOptions, isLoading } = useTopupOptions();
   const createMutation = useCreateTopupOption();
   const updateMutation = useUpdateTopupOption();
   const deleteMutation = useDeleteTopupOption();
+  useProtectAdminRoute();
 
   if (isLoading) return <p>Loading...</p>;
 

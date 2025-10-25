@@ -11,13 +11,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginAdmin } from "@/services/adminApi";
 // import { loginAdmin } from "@/lib/api";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -26,8 +27,9 @@ export function LoginForm({
     e.preventDefault();
     setError("");
 
-    // const response = await loginAdmin(email, password);
-    const response = { success: true, error: null, data: { isAdmin: true } }; // dummy
+    console.log(username, password);
+    const response = await loginAdmin(username, password);
+    // const response = { success: true, error: null, data: { isAdmin: true } }; // dummy
 
     if (!response.success) {
       setError(response.error || "Login failed");
@@ -44,19 +46,19 @@ export function LoginForm({
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your username below to login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="username">Username</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   placeholder="m@example.com"
                   required
                 />

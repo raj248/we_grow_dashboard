@@ -3,10 +3,12 @@ import { DataTable } from "@/components/table/user-table";
 import { columns } from "@/components/columns/boostplan";
 import { BoostPlanDialog } from "@/components/BoostPlanDialog";
 import type { BoostPlan } from "@/types/entities";
+import { useProtectAdminRoute } from "@/hooks/useProtectAdminRoute";
 
 export default function BoostPlanPage() {
   const { data: boostPlans, isLoading } = useBoostPlans();
   const deleteMutation = useDeleteBoostPlan();
+  useProtectAdminRoute();
 
   if (isLoading) return <p>Loading...</p>;
 
