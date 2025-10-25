@@ -28,7 +28,8 @@ export const createBoostPlan = async (
 ): Promise<APIResponse<BoostPlan>> => {
   const res = await axios.post<APIResponse<BoostPlan>>(
     `${API_URL}/boost-plans`,
-    boostPlan
+    boostPlan,
+    { withCredentials: true }
   );
   return res.data;
 };
@@ -42,7 +43,8 @@ export const updateBoostPlan = async (
 ): Promise<APIResponse<BoostPlan>> => {
   const res = await axios.put<APIResponse<BoostPlan>>(
     `${API_URL}/boost-plans/${id}`,
-    boostPlan
+    boostPlan,
+    { withCredentials: true }
   );
   return res.data;
 };
@@ -52,7 +54,8 @@ export const deleteBoostPlan = async (
   id: string
 ): Promise<APIResponse<null>> => {
   const res = await axios.delete<APIResponse<null>>(
-    `${API_URL}/boost-plans/${id}`
+    `${API_URL}/boost-plans/${id}`,
+    { withCredentials: true }
   );
   return res.data;
 };

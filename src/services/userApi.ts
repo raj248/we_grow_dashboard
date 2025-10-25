@@ -20,6 +20,8 @@ export const getUserById = async (id: string): Promise<APIResponse<User>> => {
 export const getActiveUsersLast24Hrs = async (): Promise<
   APIResponse<User[]>
 > => {
-  const res = await axios.get<APIResponse<User[]>>(`${API_URL}/user/active`);
+  const res = await axios.get<APIResponse<User[]>>(`${API_URL}/user/active`, {
+    withCredentials: true,
+  });
   return res.data;
 };

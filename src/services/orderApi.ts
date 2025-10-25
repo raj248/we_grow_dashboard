@@ -6,7 +6,9 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 // ✅ GET all orders
 export const getAllOrders = async (): Promise<APIResponse<Order[]>> => {
-  const res = await axios.get<APIResponse<Order[]>>(`${API_URL}/order`);
+  const res = await axios.get<APIResponse<Order[]>>(`${API_URL}/order`, {
+    withCredentials: true,
+  });
   return res.data; // keep success + error + data
 };
 
@@ -33,7 +35,8 @@ export const updateOrderStatus = async (
 ): Promise<APIResponse<Order>> => {
   const res = await axios.patch<APIResponse<Order>>(
     `${API_URL}/order/${id}/status`,
-    { status }
+    { status },
+    { withCredentials: true }
   );
   return res.data;
 };
@@ -112,12 +115,18 @@ export const updateOrderFinalSubscriberCount = async (
 
 // delte order
 export const deleteOrder = async (id: string): Promise<APIResponse<Order>> => {
-  const res = await axios.delete<APIResponse<Order>>(`${API_URL}/order/${id}`);
+  const res = await axios.delete<APIResponse<Order>>(`${API_URL}/order/${id}`, {
+    withCredentials: true,
+  });
   return res.data;
 };
 
 // refresh all orders
 export const refreshAllOrders = async (): Promise<APIResponse<null>> => {
-  const res = await axios.post<APIResponse<null>>(`${API_URL}/run-worker-now`);
+  const res = await axios.post<APIResponse<null>>(
+    `${API_URL}/run-worker-now`,
+    {},
+    { withCredentials: true }
+  );
   return res.data;
 };

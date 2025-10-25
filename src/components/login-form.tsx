@@ -27,7 +27,6 @@ export function LoginForm({
     e.preventDefault();
     setError("");
 
-    console.log(username, password);
     const response = await loginAdmin(username, password);
     // const response = { success: true, error: null, data: { isAdmin: true } }; // dummy
 

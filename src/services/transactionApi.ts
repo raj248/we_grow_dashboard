@@ -9,7 +9,8 @@ export const getAllTransactions = async (): Promise<
   APIResponse<Transaction[]>
 > => {
   const res = await axios.get<APIResponse<Transaction[]>>(
-    `${API_URL}/transactions`
+    `${API_URL}/transactions`,
+    { withCredentials: true }
   );
   return res.data;
 };
@@ -19,7 +20,8 @@ export const getTransactionById = async (
   id: string
 ): Promise<APIResponse<Transaction>> => {
   const res = await axios.get<APIResponse<Transaction>>(
-    `${API_URL}/transactions/${id}`
+    `${API_URL}/transactions/${id}`,
+    { withCredentials: true }
   );
   return res.data;
 };
@@ -29,7 +31,8 @@ export const getTransactionsByUserId = async (
   userId: string
 ): Promise<APIResponse<Transaction[]>> => {
   const res = await axios.get<APIResponse<Transaction[]>>(
-    `${API_URL}/transactions/user/${userId}`
+    `${API_URL}/transactions/user/${userId}`,
+    { withCredentials: true }
   );
   return res.data;
 };

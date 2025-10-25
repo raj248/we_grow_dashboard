@@ -21,6 +21,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { OrderDetailsSheet } from "@/components/order-details-sheet";
 
 export default function Dashboard() {
   useProtectAdminRoute();
@@ -28,6 +29,7 @@ export default function Dashboard() {
   const { data: orders, isLoading, refetch } = useOrders();
   const [isRefreshingAll, setIsRefreshingAll] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
 
   const handleRefreshAll = async () => {
     setOpenDialog(false); // close dialog
@@ -119,7 +121,10 @@ export default function Dashboard() {
     return (
       <div
         key={order.id}
-        className="flex flex-col gap-2 p-3 shadow-sm rounded-md border border-border"
+        className="flex flex-col gap-2 p-3 shadow-sm rounded-md border border-border cursor-pointer"
+        onClick={() => {
+          setSelectedOrder(order);
+        }}
       >
         <div className="flex justify-between items-center">
           <span className="font-semibold">Order #{order.id}</span>
@@ -182,7 +187,11 @@ export default function Dashboard() {
         <>
           <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive" disabled={isRefreshingAll}>
+              <Button
+                variant="destructive"
+                disabled={isRefreshingAll}
+                className="cursor-pointer"
+              >
                 Refresh All Orders
               </Button>
             </AlertDialogTrigger>
@@ -314,6 +323,10 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+      <OrderDetailsSheet
+        order={selectedOrder}
+        onClose={() => setSelectedOrder(null)}
+      />
     </div>
   );
 }

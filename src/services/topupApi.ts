@@ -9,7 +9,7 @@ export const getAllTopupOptions = async (): Promise<
   APIResponse<TopupOptions[]>
 > => {
   const res = await axios.get<APIResponse<TopupOptions[]>>(
-    `${API_URL}/topup-options`
+    `${API_URL}/topup-options?active=false`
   );
   return res.data;
 };
@@ -30,7 +30,8 @@ export const createTopupOption = async (
 ): Promise<APIResponse<TopupOptions>> => {
   const res = await axios.post<APIResponse<TopupOptions>>(
     `${API_URL}/topup-options`,
-    topupOption
+    topupOption,
+    { withCredentials: true }
   );
   return res.data;
 };
@@ -43,7 +44,8 @@ export const updateTopupOption = async (
   console.log(id, topupOption);
   const res = await axios.put<APIResponse<TopupOptions>>(
     `${API_URL}/topup-options/${id}`,
-    topupOption
+    topupOption,
+    { withCredentials: true }
   );
   return res.data;
 };
@@ -53,7 +55,8 @@ export const deleteTopupOption = async (
   id: string
 ): Promise<APIResponse<null>> => {
   const res = await axios.delete<APIResponse<null>>(
-    `${API_URL}/topup-options/${id}`
+    `${API_URL}/topup-options/${id}`,
+    { withCredentials: true }
   );
   return res.data;
 };
